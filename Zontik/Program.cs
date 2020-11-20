@@ -10,8 +10,9 @@ using System.Reflection;
 using CronNET;
 using System.Threading;
 using System.Net.Sockets;
+using Topshelf;
 
-namespace WeatherProviderConsoleApp
+namespace Zontik
 {
     class Program
     {
@@ -27,6 +28,12 @@ namespace WeatherProviderConsoleApp
             //Wait and sleep forever. Let the cron daemon run.
             while (true) Thread.Sleep(6000);
             //Console.ReadLine();
+
+
+            var exitCode = HostFactory.Run(x =>
+            {
+                x.Service<H>
+            });
         }
 
          static void Task()
