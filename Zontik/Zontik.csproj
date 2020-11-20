@@ -73,7 +73,7 @@
     <Compile Include="Weather.cs" />
     <Compile Include="XmlReadItem.cs" />
     <Compile Include="YandexWeatherAPI.cs" />
-    <Compile Include="ZontikMain.cs" />
+    <Compile Include="ZontikMainService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
