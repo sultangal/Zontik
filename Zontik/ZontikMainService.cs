@@ -4,29 +4,40 @@ using CronNET;
 using System.Reflection;
 using System.Threading;
 using System.ServiceProcess;
+using System.Threading.Tasks;
 
 namespace Zontik
 {
-    class ZontikMainService 
-        //: ServiceBase
+    class ZontikMainService
+    //: ServiceBase
     {
         private static readonly CronDaemon cron_daemon = new CronDaemon();
-        
+
         public ZontikMainService()
         {
-           
+
         }
         public void OnStart()
         {
-            //Task();
-            cron_daemon.AddJob(System.Configuration.ConfigurationManager.AppSettings["Time_Loop"], Task);
-            cron_daemon.Start();
+            Thread task_thread = new Thread(new ThreadStart(TaskNewThread));
+            task_thread.Start();
+
         }
 
         public void OnStop()
         {
             cron_daemon.Stop();
         }
+
+
+        private void TaskNewThread()
+        {
+            Task();
+            cron_daemon.AddJob(System.Configuration.ConfigurationManager.AppSettings["Time_Loop"], Task);
+            cron_daemon.Start();
+
+        }
+
         private void Task()
         {
             string host = System.Configuration.ConfigurationManager.AppSettings["host"];
@@ -57,9 +68,10 @@ namespace Zontik
                     val = city + "*" + temp + "*" + condition;
                     sendToVizEngine.SendViaTCP(host, port, "key" + i, val);
                 }
+                ConsoleMessage.Write(item_list.Count.ToString());
                 sendToVizEngine.SendViaTCP(host, port, "city_number", item_list.Count.ToString()); //
                 DateTime now = DateTime.Now;
-                //Console.WriteLine((now.Hour * 60 + now.Minute).ToString());
+                ConsoleMessage.Write((now.Hour * 60 + now.Minute).ToString());
                 sendToVizEngine.SendViaTCP(host, port, "data_freshness", (now.Hour * 60 + now.Minute).ToString());
             }
             catch (Exception e)
