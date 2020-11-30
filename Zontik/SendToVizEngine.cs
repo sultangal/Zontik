@@ -14,7 +14,7 @@ namespace Zontik
         public void SendViaTCP(string host, int port, string key, string val)
         {
             using TcpClient _tcpClient = new TcpClient();
-            string data = key + "|" + escapeString(val);
+            string data = key + "|" + EscapeString(val);
             while (true)
             {
                 try
@@ -28,8 +28,8 @@ namespace Zontik
                 }
                 catch (Exception e)
                 {
-                    ConsoleMessage.Write("Ошибка подключения к VizEngine. Попробую снова через 15 сек...", e);
-                    Thread.Sleep(15000);
+                    ConsoleMessage.Write("Ошибка подключения к VizEngine. Попробую снова через минуту...", e);
+                    Thread.Sleep(60000);
                     continue;
                 }
 
@@ -49,7 +49,7 @@ namespace Zontik
                 return Convert.ToChar(Convert.ToUInt32('A') + i - 10);
         }
 
-        private string escapeString(string s)
+        private string EscapeString(string s)
         {
             string returnStr = "";
             int i = 0;

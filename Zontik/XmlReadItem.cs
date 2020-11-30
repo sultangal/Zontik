@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Xml;
 
 namespace Zontik
@@ -10,42 +9,49 @@ namespace Zontik
 
     class XmlReadItem
     {
-        List<Item> item;
+        List<Item> itemList;
         public XmlReadItem(string path)
         {
-            try
-            {
-                XmlReader reader = XmlReader.Create(path);
-                item = new List<Item>();
-                while (reader.Read())
+            while (true) { 
+                try
                 {
-                    if ((reader.NodeType == XmlNodeType.Element) && (reader.Name == "record"))
+                    XmlReader reader = XmlReader.Create(path);
+                    itemList = new List<Item>();
+                    while (reader.Read())
                     {
-                        if (reader.HasAttributes)
+                        if ((reader.NodeType == XmlNodeType.Element) && (reader.Name == "record"))
                         {
-                            Item i = new Item();
-                            i.Index = Convert.ToInt32(reader.GetAttribute("index"));
-                            i.City = reader.GetAttribute("city");
-                            i.Lat = Convert.ToDouble(reader.GetAttribute("lat"));
-                            i.Lon = Convert.ToDouble(reader.GetAttribute("lon"));
-                            i.Popul = Convert.ToInt32(reader.GetAttribute("popul"));
-                            item.Add(i);
+                            if (reader.HasAttributes)
+                            {
+                                Item i = new Item();
+                                i.Index = Convert.ToInt32(reader.GetAttribute("index"));
+                                i.City = reader.GetAttribute("city");
+                                i.Lat = Convert.ToDouble(reader.GetAttribute("lat"));
+                                i.Lon = Convert.ToDouble(reader.GetAttribute("lon"));
+                                i.Popul = Convert.ToInt32(reader.GetAttribute("popul"));
+                                itemList.Add(i);
 
+                            }
                         }
-                    }
 
+                    }
+                    reader.Close();
                 }
-                reader.Close();
-            }
-            catch (Exception e)
-            {
-                ConsoleMessage.Write("Ошибка при чтении xml файла", e);
+                catch (Exception e)
+                {
+                    ConsoleMessage.Write("Ошибка при чтении xml файла. Попробую снова через минуту...", e);
+                    Thread.Sleep(60000);
+                    continue;
+                }
+                bool isEmpty = itemList.Any();
+                if (isEmpty){ break;}
             }
         }
 
         public List<Item> ReturnItemList()
         {
-            return item;
+            
+            return itemList;
         }
 
     }

@@ -40,10 +40,11 @@ namespace Zontik
 
         private void Task()
         {
-            string host = System.Configuration.ConfigurationManager.AppSettings["host"];
-            int port = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["port"]);
             try
             {
+                string host = System.Configuration.ConfigurationManager.AppSettings["host"];
+                int port = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["port"]);
+
                 //Console.ForegroundColor = ConsoleColor.White;
                 //Console.WriteLine(System.DateTime.Now);
                 SendToVizEngine sendToVizEngine = new SendToVizEngine();
@@ -76,7 +77,7 @@ namespace Zontik
             }
             catch (Exception e)
             {
-                ConsoleMessage.Write("Произошла ошибка", e);
+                ConsoleMessage.Write("Произошла ошибка. Перезапустите службу.", e);
             }
         }
     }

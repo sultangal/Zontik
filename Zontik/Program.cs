@@ -14,11 +14,11 @@ namespace Zontik
                 {
                     s.ConstructUsing(zontikMainService => new ZontikMainService());
                     s.WhenStarted(zontikMainService => zontikMainService.OnStart());
-                    s.WhenStopped(zontikMainService => zontikMainService.OnStop());
+                    s.WhenStopped(zontikMainService => zontikMainService.OnStop());                    
                 });
 
                 x.RunAsLocalSystem();
-
+                
                 x.SetServiceName("Zontik");
                 x.SetDisplayName("Zontik");
                 x.SetDescription("Служба для парсинга данных сервера погоды и дальнейшей передачи в VizEngine");
