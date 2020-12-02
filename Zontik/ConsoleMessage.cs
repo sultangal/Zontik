@@ -12,14 +12,18 @@ namespace Zontik
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         static public void Write(string message)
         {
+#if DEBUG
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(message);
+#endif
             Logger.Info(message);
         }
         static public void Write(string message, Exception e)
         {
+#if DEBUG
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(message);
+#endif
             Logger.Info(message);
             Logger.Error(e);
         }
