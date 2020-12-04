@@ -12,6 +12,7 @@ namespace Zontik
         List<Item> itemList;
         public XmlReadItem(string path)
         {
+            int city_counter = 0;
             while (true) { 
                 try
                 {
@@ -24,13 +25,12 @@ namespace Zontik
                             if (reader.HasAttributes)
                             {
                                 Item i = new Item();
-                                i.Index = Convert.ToInt32(reader.GetAttribute("index"));
+                                i.Index = city_counter;
                                 i.City = reader.GetAttribute("city");
-                                i.Lat = Convert.ToDouble(reader.GetAttribute("lat"));
-                                i.Lon = Convert.ToDouble(reader.GetAttribute("lon"));
-                                i.Popul = Convert.ToInt32(reader.GetAttribute("popul"));
+                                i.Lat = Convert.ToDouble((reader.GetAttribute("lat")).Replace(".", ","));
+                                i.Lon = Convert.ToDouble((reader.GetAttribute("lon")).Replace(".", ","));
                                 itemList.Add(i);
-
+                                city_counter++;
                             }
                         }
 

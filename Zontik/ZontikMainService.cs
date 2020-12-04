@@ -64,7 +64,7 @@ namespace Zontik
                     Weather weather = new Weather(lat, lon);
                     int temp = weather.WeatherTemp();
                     string condition = weather.WeatherCondition();
-                    ConsoleMessage.Write("Передаю данные");
+                    ConsoleMessage.Write("Начинаю передачу следующих данных в VizEngine:");
                     ConsoleMessage.Write(i + "\t" + lat + " " + lon + "\t" + temp + "\t" + city.Trim() + " \t \t " + condition.Trim());
                     val = city + "*" + temp + "*" + condition;
                     sendToVizEngine.SendViaTCP(host, port, "key" + i, val);
