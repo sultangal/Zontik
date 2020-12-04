@@ -25,7 +25,6 @@ namespace Zontik
                             if (reader.HasAttributes)
                             {
                                 Item i = new Item();
-                                i.Index = city_counter;
                                 i.City = reader.GetAttribute("city");
                                 i.Lat = Convert.ToDouble((reader.GetAttribute("lat")).Replace(".", ","));
                                 i.Lon = Convert.ToDouble((reader.GetAttribute("lon")).Replace(".", ","));

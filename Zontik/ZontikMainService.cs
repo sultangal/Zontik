@@ -54,13 +54,12 @@ namespace Zontik
                 Item item = new Item();
                 string lat = "";
                 string lon = "";
-                string val = "";
+                string val = "";               
                 for (int i = 0; i < item_list.Count; i++) //
                 {
-                    item = item_list.Find(a => a.Index == i);
-                    string city = item.City;
-                    lat = item.Lat.ToString();
-                    lon = item.Lon.ToString();
+                    string city = item_list[i].City;
+                    lat = item_list[i].Lat.ToString();
+                    lon = item_list[i].Lon.ToString();
                     Weather weather = new Weather(lat, lon);
                     int temp = weather.WeatherTemp();
                     string condition = weather.WeatherCondition();
