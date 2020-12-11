@@ -8,16 +8,17 @@ namespace Zontik
 {
     class Weather
     {
-        private YandexWeatherAPI yandexWeatherAPI;
+        //private YandexWeatherAPI yandexWeatherAPI;
+        private GisMeteoWeatherAPI gisMeteoWeatherAPI;
         public Weather(string lat, string lon)
         {
             while (true) { 
                 try
                 {           
                 lat = lat.Replace(",", ".");
-                lon = lon.Replace(",", ".");           
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"https://api.weather.yandex.ru/v2/forecast?lat={lat}&lon={lon}");
-                request.Headers.Add("X-Yandex-API-Key: "+System.Configuration.ConfigurationManager.AppSettings["X-Yandex-API-Key"]);
+                lon = lon.Replace(",", ".");               
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"http://api.gismeteo.net/v3/weather/current?latitude={lat}&longitude={lon}");
+                request.Headers.Add("X-Gismeteo-Token:" + System.Configuration.ConfigurationManager.AppSettings["X-Gismeteo-Token"]);
 
                     WebProxy myproxy = new WebProxy(System.Configuration.ConfigurationManager.AppSettings["ProxyServerIp"],
                         Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["ProxyServerPort"]))
@@ -36,7 +37,7 @@ namespace Zontik
                 }
                     ConsoleMessage.Write("Полученный поток успешно прочитан");
 
-                yandexWeatherAPI = JsonConvert.DeserializeObject<YandexWeatherAPI>(strResponse);
+                    gisMeteoWeatherAPI = JsonConvert.DeserializeObject<GisMeteoWeatherAPI>(strResponse);
                 }
                 catch (Exception e)
                 {
@@ -44,19 +45,19 @@ namespace Zontik
                     Thread.Sleep(60000);
                     continue;
                 }
-               if (yandexWeatherAPI != null) { break; }
+               if (gisMeteoWeatherAPI != null) { break; }
             }
 
         }
 
         public int WeatherTemp()
         {
-            return yandexWeatherAPI.fact.temp;
+            return (int)Math.Truncate(gisMeteoWeatherAPI.data.temperature.air.C);
         }
 
         public string WeatherCondition()
         {
-            return yandexWeatherAPI.fact.condition.ToString();
+            return gisMeteoWeatherAPI.data.icon.IconWeather.ToString();
         }
     }
 }
