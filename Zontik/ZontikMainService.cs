@@ -13,15 +13,11 @@ namespace Zontik
     {
         private static readonly CronDaemon cron_daemon = new CronDaemon();
 
-        public ZontikMainService()
-        {
-
-        }
+        public ZontikMainService() { }
         public void OnStart()
         {
             Thread task_thread = new Thread(new ThreadStart(TaskNewThread));
             task_thread.Start();
-
         }
 
         public void OnStop()
@@ -29,13 +25,11 @@ namespace Zontik
             cron_daemon.Stop();
         }
 
-
         private void TaskNewThread()
         {
             Task();
             cron_daemon.AddJob(System.Configuration.ConfigurationManager.AppSettings["Time_Loop"], Task);
             cron_daemon.Start();
-
         }
 
         private void Task()
@@ -44,6 +38,7 @@ namespace Zontik
             {
                 string host = System.Configuration.ConfigurationManager.AppSettings["host"];
                 int port = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["port"]);
+                int apiSwitch = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["API_switch"]);
 
                 //Console.ForegroundColor = ConsoleColor.White;
                 //Console.WriteLine(System.DateTime.Now);
@@ -60,14 +55,56 @@ namespace Zontik
                     string city = item_list[i].City;
                     lat = item_list[i].Lat.ToString();
                     lon = item_list[i].Lon.ToString();
-                    Weather weather = new Weather(lat, lon);
-                    int temp = weather.WeatherTemp();
-                    string condition = weather.WeatherCondition();
-                    ConsoleMessage.Write("Начинаю передачу следующих данных в VizEngine:");
-                    ConsoleMessage.Write($"{i,40} {lat,5} {lon,20} {temp,20} {city,5} {condition,20}");
-                    //ConsoleMessage.Write(i + "\t" + lat + " " + lon + "\t" + temp + "\t" + city.Trim() + " \t \t " + condition.Trim());
-                    val = city + "*" + temp + "*" + condition;
-                    sendToVizEngine.SendViaTCP(host, port, "key" + i, val);
+
+                    switch (apiSwitch)
+                    {
+                        case 1:
+                            { 
+                                WeatherGis weather = new WeatherGis(lat, lon);
+                                int temp = weather.WeatherTemp();
+                                string condition = weather.WeatherCondition();
+                                ConsoleMessage.Write("(GIS)Начинаю передачу следующих данных в VizEngine:");
+                                ConsoleMessage.Write($"{i,40} {lat,5} {lon,20} {temp,20} {city,5} {condition,20}");
+                                val = city + "*" + temp + "*" + condition;
+                                sendToVizEngine.SendViaTCP(host, port, "key" + i, val);
+                                break;
+                            }
+                        case 2:
+                            { 
+                                WeatherYan weather = new WeatherYan(lat, lon);
+                                int temp = weather.WeatherTemp();
+                                string condition = weather.WeatherCondition();
+                                ConsoleMessage.Write("(YAN)Начинаю передачу следующих данных в VizEngine:");
+                                ConsoleMessage.Write($"{i,40} {lat,5} {lon,20} {temp,20} {city,5} {condition,20}");
+                                val = city + "*" + temp + "*" + condition;
+                                sendToVizEngine.SendViaTCP(host, port, "key" + i, val);
+                                break;
+                            }
+                        default:
+                            break;
+                    }
+
+                    //if (apiSwitch == 1)
+                    //{
+                    //    WeatherGis weather = new WeatherGis(lat, lon);
+                    //    int temp = weather.WeatherTemp();
+                    //    string condition = weather.WeatherCondition();
+                    //    ConsoleMessage.Write("Начинаю передачу следующих данных в VizEngine:");
+                    //    ConsoleMessage.Write($"{i,40} {lat,5} {lon,20} {temp,20} {city,5} {condition,20}");
+                    //    val = city + "*" + temp + "*" + condition;
+                    //    sendToVizEngine.SendViaTCP(host, port, "key" + i, val);
+                    //}
+                    //else if (apiSwitch == 2)
+                    //{
+                    //    WeatherYandex weather = new WeatherYandex(lat, lon);
+                    //    int temp = weather.WeatherTemp();
+                    //    string condition = weather.WeatherCondition();
+                    //    ConsoleMessage.Write("Начинаю передачу следующих данных в VizEngine:");
+                    //    ConsoleMessage.Write($"{i,40} {lat,5} {lon,20} {temp,20} {city,5} {condition,20}");
+                    //    val = city + "*" + temp + "*" + condition;
+                    //    sendToVizEngine.SendViaTCP(host, port, "key" + i, val);
+                    //}
+
                 }
                 ConsoleMessage.Write(item_list.Count.ToString());
                 sendToVizEngine.SendViaTCP(host, port, "city_number", item_list.Count.ToString()); //
