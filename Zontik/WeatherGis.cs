@@ -16,7 +16,7 @@ namespace Zontik
                 {           
                 lat = lat.Replace(",", ".");
                 lon = lon.Replace(",", ".");               
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"http://api.gismeteo.net/v3/weather/current?latitude={lat}&longitude={lon}");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"http://api.gismeteo.net/v3/weather/forecast/aggregate?latitude={lat}&longitude={lon}&days=2");
                 request.Headers.Add("X-Gismeteo-Token:" + System.Configuration.ConfigurationManager.AppSettings["X-Gismeteo-Token"]);
 
                     WebProxy myproxy = new WebProxy(System.Configuration.ConfigurationManager.AppSettings["ProxyServerIp"],
@@ -51,12 +51,16 @@ namespace Zontik
 
         public override int WeatherTemp()
         {
-            return (int)Math.Truncate(gisMeteoWeatherAPI.data.temperature.air.C);
+            //return 0;
+            // return (int)Math.Truncate(gisMeteoWeatherAPI.data.temperature.air.avg.C);
+            return (int)Math.Truncate(gisMeteoWeatherAPI.data[1].temperature.air.avg.C);
         }
 
         public override string WeatherCondition()
         {
-            return ConvertGisIconID(gisMeteoWeatherAPI.data.icon.IconWeather.ToString());
+            //return "0";
+            //return ConvertGisIconID(gisMeteoWeatherAPI.data.icon.IconWeather.ToString());
+            return ConvertGisIconID(gisMeteoWeatherAPI.data[1].icon.IconWeather.ToString());
         }
 
         private string ConvertGisIconID(string iconId)

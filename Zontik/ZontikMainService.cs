@@ -59,13 +59,15 @@ namespace Zontik
                     switch (apiSwitch)
                     {
                         case 1:
-                            { 
+                            {
+                                string tempStr;
                                 WeatherGis weather = new WeatherGis(lat, lon);
                                 int temp = weather.WeatherTemp();
+                                if (temp > 0) tempStr = "+" + temp; else tempStr = temp.ToString(); //adding sign "+" to temperature above zero
                                 string condition = weather.WeatherCondition();
                                 ConsoleMessage.Write("(GIS)Начинаю передачу следующих данных в VizEngine:");
-                                ConsoleMessage.Write($"{i,40} {lat,5} {lon,20} {temp,20} {city,5} {condition,20}");
-                                val = city + "*" + temp + "*" + condition;
+                                ConsoleMessage.Write($"{i,40} {lat,5} {lon,20} {tempStr,20} {city,5} {condition,20}");
+                                val = city + "*" + tempStr + "*" + condition;
                                 sendToVizEngine.SendViaTCP(host, port, "key" + i, val);
                                 break;
                             }
