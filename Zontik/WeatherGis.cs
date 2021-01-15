@@ -9,9 +9,11 @@ namespace Zontik
     class WeatherGis : Weather
     {
         private GisMeteoWeatherAPI gisMeteoWeatherAPI;
+        public readonly bool isError = false;
+        private int errorCount = 0;
         public WeatherGis(string lat, string lon)
         {
-            while (true) { 
+            while (true) {               
                 try
                 {           
                 lat = lat.Replace(",", ".");
@@ -38,9 +40,23 @@ namespace Zontik
 
                     gisMeteoWeatherAPI = JsonConvert.DeserializeObject<GisMeteoWeatherAPI>(strResponse);
                 }
+
+                catch (WebException e)
+                {                   
+                    if (errorCount==5) {
+                        ConsoleMessage.Write("Ошибка запроса на сервер погоды. Перехожу на следующую итерацию", e); 
+                            isError = true; 
+                            errorCount = 0; 
+                            break; }
+                    ConsoleMessage.Write("Ошибка запроса на сервер погоды. Попробую снова через минуту...", e);
+                    errorCount++;
+                    Thread.Sleep(600);                   
+                    continue;
+                }
+
                 catch (Exception e)
                 {
-                    ConsoleMessage.Write("Ошибка запроса на сервер погоды. Попробую снова через минуту...", e);
+                    ConsoleMessage.Write("Ошибка запроса. Попробую снова через минуту...", e);
                     Thread.Sleep(60000);
                     continue;
                 }
@@ -51,15 +67,11 @@ namespace Zontik
 
         public override int WeatherTemp()
         {
-            //return 0;
-            // return (int)Math.Truncate(gisMeteoWeatherAPI.data.temperature.air.avg.C);
             return (int)Math.Truncate(gisMeteoWeatherAPI.data[1].temperature.air.avg.C);
         }
 
         public override string WeatherCondition()
         {
-            //return "0";
-            //return ConvertGisIconID(gisMeteoWeatherAPI.data.icon.IconWeather.ToString());
             return ConvertGisIconID(gisMeteoWeatherAPI.data[1].icon.IconWeather.ToString());
         }
 
@@ -74,19 +86,6 @@ namespace Zontik
             else if (iconId.Contains("c1") && iconId.Contains("c2") && iconId.Contains("c101"))     return "clouds";
             else if (iconId.Contains("c3"))                                                         return "overcast";
                                                                                                     return "clear";
-            //switch (iconId)
-            //{
-            //    case iconId.Contains("st"):
-            //        Console.WriteLine("Case 1");
-            //        break;
-            //    case 2:
-            //        Console.WriteLine("Case 2");
-            //        break;
-            //    default:
-            //        Console.WriteLine("Default case");
-            //        break;
-            //}
-            //return "null";
         }
 
     }
