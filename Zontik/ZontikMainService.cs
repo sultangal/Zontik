@@ -69,7 +69,7 @@ namespace Zontik
                                 if (temp > 0) tempStr = "+" + temp; else tempStr = temp.ToString(); //adding sign "+" to temperature above zero
                                 string condition = weather.WeatherCondition();
                                 ConsoleMessage.Write("(GIS)Начинаю передачу следующих данных в VizEngine:");
-                                ConsoleMessage.Write($"{cityCount,40} {lat,5} {lon,20} {tempStr,20} {city,5} {condition,20}");
+                                ConsoleMessage.Write($"{cityCount,5} {lat,5} {lon,20} {tempStr,20} {city,5} {condition,20} {"currDate "+weather.LocalCurrDate(),10} {"frcDate "+weather.LocalForecastDate(),10}");
                                 val = city + "*" + tempStr + "*" + condition;
                                 sendToVizEngine.SendViaTCP(host, port, "key" + cityCount, val);
                                 cityCount++;

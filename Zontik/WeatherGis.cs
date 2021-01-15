@@ -75,6 +75,16 @@ namespace Zontik
             return ConvertGisIconID(gisMeteoWeatherAPI.data[1].icon.IconWeather.ToString());
         }
 
+        public string LocalCurrDate()
+        {
+            return gisMeteoWeatherAPI.data[0].date.local;
+        }
+
+        public string LocalForecastDate()
+        {
+            return gisMeteoWeatherAPI.data[1].date.local;
+        }
+
         private string ConvertGisIconID(string iconId)
         {
 
