@@ -48,9 +48,9 @@ namespace Zontik
                             isError = true; 
                             errorCount = 0; 
                             break; }
-                    ConsoleMessage.Write("Ошибка запроса на сервер погоды. Попробую снова через минуту...", e);
+                    ConsoleMessage.Write("Ошибка запроса на сервер погоды. Попробую снова...", e);
                     errorCount++;
-                    Thread.Sleep(600);                   
+                    Thread.Sleep(1000);                   
                     continue;
                 }
 
