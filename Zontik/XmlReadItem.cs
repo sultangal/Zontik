@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Xml;
+using System.Globalization;
 
 namespace Zontik
 {
@@ -24,10 +25,18 @@ namespace Zontik
                         {
                             if (reader.HasAttributes)
                             {
+                                NumberFormatInfo numberFormat = new NumberFormatInfo();
+                                numberFormat.NumberDecimalSeparator = ".";
+
                                 Item i = new Item();
                                 i.City = reader.GetAttribute("city");
-                                i.Lat = Convert.ToDouble((reader.GetAttribute("lat")).Replace(".", ","));
-                                i.Lon = Convert.ToDouble((reader.GetAttribute("lon")).Replace(".", ","));
+                                //ConsoleMessage.Write("BEFORE: "+ reader.GetAttribute("lat"));
+                                string latStr = reader.GetAttribute("lat").Replace(",", ".");
+                                //ConsoleMessage.Write("latStr: " + latStr);
+                                i.Lat = Math.Round(Convert.ToDecimal(latStr, numberFormat),14);
+                                //ConsoleMessage.Write("AFTER: " + i.Lat);
+                                string lonStr = reader.GetAttribute("lon").Replace(",", ".");
+                                i.Lon = Math.Round(Convert.ToDecimal(lonStr, numberFormat),14);
                                 itemList.Add(i);
                                 city_counter++;
                             }

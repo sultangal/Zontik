@@ -9,7 +9,7 @@ namespace Zontik
     class Item
     {
         public string City { get; set; }
-        public double Lon { get; set; }
-        public double Lat { get; set; }
+        public decimal Lon { get; set; }
+        public decimal Lat { get; set; }
     }
 }

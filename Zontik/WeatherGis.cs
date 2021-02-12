@@ -17,8 +17,10 @@ namespace Zontik
                 try
                 {           
                 lat = lat.Replace(",", ".");
-                lon = lon.Replace(",", ".");               
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"http://api.gismeteo.net/v3/weather/forecast/aggregate?latitude={lat}&longitude={lon}&days=2");
+                lon = lon.Replace(",", ".");
+                    string reqstring = $"http://api.gismeteo.net/v3/weather/forecast/aggregate?latitude={lat}&longitude={lon}&days=2";
+                    ConsoleMessage.Write("Сформирована следующая строка для отправки на сервер: "+ reqstring);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(reqstring);
                 request.Headers.Add("X-Gismeteo-Token:" + System.Configuration.ConfigurationManager.AppSettings["X-Gismeteo-Token"]);
 
                     WebProxy myproxy = new WebProxy(System.Configuration.ConfigurationManager.AppSettings["ProxyServerIp"],
