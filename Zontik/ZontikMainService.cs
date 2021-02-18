@@ -113,10 +113,14 @@ namespace Zontik
 
                 }
                 ConsoleMessage.Write(cityCount.ToString());
-                sendToVizEngine.SendViaTCP(host, port, "city_number", cityCount.ToString()); //
-                DateTime now = DateTime.Now;
-                ConsoleMessage.Write((now.Hour * 60 + now.Minute).ToString());
-                sendToVizEngine.SendViaTCP(host, port, "data_freshness", (now.Hour * 60 + now.Minute).ToString());
+                if (cityCount != 0) 
+                {
+                    sendToVizEngine.SendViaTCP(host, port, "city_number", cityCount.ToString()); //
+                    DateTime now = DateTime.Now;
+                    ConsoleMessage.Write((now.Hour * 60 + now.Minute).ToString());
+                    sendToVizEngine.SendViaTCP(host, port, "data_freshness", (now.Hour * 60 + now.Minute).ToString());
+                } 
+                
             }
             catch (Exception e)
             {
