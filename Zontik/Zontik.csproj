@@ -79,6 +79,7 @@
     <Compile Include="ZontikMainService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="readme.txt" />
     <None Include="App.config" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
