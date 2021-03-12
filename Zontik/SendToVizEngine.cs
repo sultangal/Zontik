@@ -28,8 +28,8 @@ namespace Zontik
                 }
                 catch (Exception e)
                 {
-                    ConsoleMessage.Write("Ошибка подключения к VizEngine. Попробую снова через минуту...", e);
-                    Thread.Sleep(60000);
+                    ConsoleMessage.Write("Ошибка подключения к VizEngine. Попробую снова через 15 секунд...", e);
+                    Thread.Sleep(15000);
                     continue;
                 }
 

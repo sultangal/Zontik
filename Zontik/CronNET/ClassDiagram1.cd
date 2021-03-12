@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CronNET.CronDaemon">
+    <Position X="6.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gARAAAAAACAAAAAAAAAAAAAAAAAAAAAAYBAAAAAAAAA=</HashCode>
+      <FileName>CronNET\CronDaemon.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CronNET.CronJob">
+    <Position X="8.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAABgAAAlAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CronNET\CronJob.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.377" />
+  </Class>
+  <Class Name="CronNET.CronSchedule">
+    <Position X="10.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAIBAAAABhCAIAAQAEACCEQAQAIACAQAAQwAAAAFQ=</HashCode>
+      <FileName>CronNET\CronSchedule.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="CronNET.ICronDaemon">
+    <Position X="6.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAIBAAAAAAAAA=</HashCode>
+      <FileName>CronNET\CronDaemon.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CronNET.ICronJob">
+    <Position X="8.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CronNET\CronJob.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CronNET.ICronSchedule">
+    <Position X="10.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>CronNET\CronSchedule.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
