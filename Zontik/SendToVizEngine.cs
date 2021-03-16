@@ -13,17 +13,17 @@ namespace Zontik
         public SendToVizEngine() { }
         public void SendViaTCP(string host, int port, string key, string val)
         {
-            using TcpClient _tcpClient = new TcpClient();
+            using TcpClient tcpClient = new TcpClient();
             string data = key + "|" + EscapeString(val);
             while (true)
             {
                 try
                 {
                     LogMessage.Write("Подключаюсь к VizEngine...");
-                    _tcpClient.Connect(host, port);
+                    tcpClient.Connect(host, port);
                     LogMessage.Write("Подключение успешно установлено");
-                    _tcpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
-                    _tcpClient.Client.Send(Encoding.UTF8.GetBytes(data + "\0"));
+                    tcpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+                    tcpClient.Client.Send(Encoding.UTF8.GetBytes(data + "\0"));
                     LogMessage.Write("Данные успешно переданы в VizEngine \n");
                 }
                 catch (Exception e)
@@ -33,9 +33,9 @@ namespace Zontik
                     continue;
                 }
 
-                if (_tcpClient.Connected)
+                if (tcpClient.Connected)
                 {
-                    _tcpClient.Close();
+                    tcpClient.Close();
                     break;
                 };
             }

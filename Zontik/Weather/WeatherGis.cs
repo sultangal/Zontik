@@ -3,6 +3,8 @@ using System.Threading;
 using System.Net;
 using System.IO;
 using Newtonsoft.Json;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace Zontik
 {
@@ -16,12 +18,12 @@ namespace Zontik
             while (true) {               
                 try
                 {           
-                lat = lat.Replace(",", ".");
-                lon = lon.Replace(",", ".");
+                    lat = lat.Replace(",", ".");
+                    lon = lon.Replace(",", ".");
                     string reqstring = $"http://api.gismeteo.net/v3/weather/forecast/aggregate?latitude={lat}&longitude={lon}&days=2";
                     LogMessage.Write("Сформирована следующая строка для отправки на сервер: "+ reqstring);
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(reqstring);
-                request.Headers.Add("X-Gismeteo-Token:" + System.Configuration.ConfigurationManager.AppSettings["X-Gismeteo-Token"]);
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(reqstring);
+                    request.Headers.Add("X-Gismeteo-Token:" + System.Configuration.ConfigurationManager.AppSettings["X-Gismeteo-Token"]);
 
                     WebProxy myproxy = new WebProxy(System.Configuration.ConfigurationManager.AppSettings["ProxyServerIp"],
                         Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["ProxyServerPort"]))
@@ -31,13 +33,14 @@ namespace Zontik
                     request.Proxy = myproxy;
                     request.Method = "GET";
 
-                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    using HttpWebResponse response = (HttpWebResponse)request.GetResponse();                   
                     LogMessage.Write("Получен ответ от сервера погоды");
-                string strResponse;
-                using (StreamReader streamRead = new StreamReader(response.GetResponseStream()))
-                {
-                    strResponse = streamRead.ReadToEnd();
-                }
+                    string strResponse;
+                    using (StreamReader streamRead = new StreamReader(response.GetResponseStream()))
+                    {
+                        strResponse = streamRead.ReadToEnd();
+                    }
+                    response.Close();
                     LogMessage.Write("Полученный поток успешно прочитан");
 
                     gisMeteoWeatherAPI = JsonConvert.DeserializeObject<GisMeteoWeatherAPI>(strResponse);

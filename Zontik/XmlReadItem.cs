@@ -17,7 +17,7 @@ namespace Zontik
             while (true) { 
                 try
                 {
-                    XmlReader reader = XmlReader.Create(path);
+                    using XmlReader reader = XmlReader.Create(path);
                     itemList = new List<Item>();
                     while (reader.Read())
                     {
@@ -40,7 +40,8 @@ namespace Zontik
                         }
 
                     }
-                    reader.Close();
+                    reader.Close();                    
+                    if (itemList.Any()) { break; }
                 }
                 catch (Exception e)
                 {
@@ -48,8 +49,7 @@ namespace Zontik
                     Thread.Sleep(60000);
                     continue;
                 }
-                bool isEmpty = itemList.Any();
-                if (isEmpty){ break;}
+                
             }
         }
 
