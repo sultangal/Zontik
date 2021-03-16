@@ -6,11 +6,11 @@ using Newtonsoft.Json;
 
 namespace Zontik
 {
-    class WeatherGis : Weather
+    class WeatherGis : IWeather
     {
         private GisMeteoWeatherAPI gisMeteoWeatherAPI;
-        public readonly bool isError = false;
         private int errorCount = 0;
+        public bool isError { get; private set; }
         public WeatherGis(string lat, string lon)
         {
             while (true) {               
@@ -19,7 +19,7 @@ namespace Zontik
                 lat = lat.Replace(",", ".");
                 lon = lon.Replace(",", ".");
                     string reqstring = $"http://api.gismeteo.net/v3/weather/forecast/aggregate?latitude={lat}&longitude={lon}&days=2";
-                    ConsoleMessage.Write("Сформирована следующая строка для отправки на сервер: "+ reqstring);
+                    LogMessage.Write("Сформирована следующая строка для отправки на сервер: "+ reqstring);
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(reqstring);
                 request.Headers.Add("X-Gismeteo-Token:" + System.Configuration.ConfigurationManager.AppSettings["X-Gismeteo-Token"]);
 
@@ -32,13 +32,13 @@ namespace Zontik
                     request.Method = "GET";
 
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                    ConsoleMessage.Write("Получен ответ от сервера погоды");
+                    LogMessage.Write("Получен ответ от сервера погоды");
                 string strResponse;
                 using (StreamReader streamRead = new StreamReader(response.GetResponseStream()))
                 {
                     strResponse = streamRead.ReadToEnd();
                 }
-                    ConsoleMessage.Write("Полученный поток успешно прочитан");
+                    LogMessage.Write("Полученный поток успешно прочитан");
 
                     gisMeteoWeatherAPI = JsonConvert.DeserializeObject<GisMeteoWeatherAPI>(strResponse);
                 }
@@ -46,11 +46,11 @@ namespace Zontik
                 catch (WebException e)
                 {                   
                     if (errorCount==5) {
-                        ConsoleMessage.Write("Ошибка запроса на сервер погоды. Перехожу на следующую итерацию", e); 
+                        LogMessage.Write("Ошибка запроса на сервер погоды. Перехожу на следующую итерацию", e); 
                             isError = true; 
                             errorCount = 0; 
                             break; }
-                    ConsoleMessage.Write("Ошибка запроса на сервер погоды. Попробую снова...", e);
+                    LogMessage.Write("Ошибка запроса на сервер погоды. Попробую снова...", e);
                     errorCount++;
                     Thread.Sleep(1000);                   
                     continue;
@@ -58,7 +58,7 @@ namespace Zontik
 
                 catch (Exception e)
                 {
-                    ConsoleMessage.Write("Ошибка запроса. Попробую снова через минуту...", e);
+                    LogMessage.Write("Ошибка запроса. Попробую снова через минуту...", e);
                     Thread.Sleep(60000);
                     continue;
                 }
@@ -67,12 +67,12 @@ namespace Zontik
 
         }
 
-        public override int WeatherTemp()
+        public int WeatherTemp()
         {
             return (int)Math.Truncate(gisMeteoWeatherAPI.data[1].temperature.air.avg.C);
         }
 
-        public override string WeatherCondition()
+        public string WeatherCondition()
         {
             return ConvertGisIconID(gisMeteoWeatherAPI.data[1].icon.IconWeather.ToString());
         }

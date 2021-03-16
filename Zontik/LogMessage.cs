@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Zontik
 {
-    static class ConsoleMessage
+    static class LogMessage
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         static public void Write(string message)

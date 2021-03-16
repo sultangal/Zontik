@@ -48,7 +48,7 @@ namespace Zontik
                     SendToVizEngine sendToVizEngine = new SendToVizEngine();
                     XmlReadItem xmlReadItem = new XmlReadItem(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\city_list.xml");
                     List<Item> item_list = xmlReadItem.ReturnItemList();
-                    ConsoleMessage.Write("Список городов считан из файла xml");
+                    LogMessage.Write("Список городов считан из файла xml");
                     Item item = new Item();
                     string lat = "";
                     string lon = "";
@@ -61,31 +61,32 @@ namespace Zontik
                         lon = item_list[i].Lon.ToString();
 
                         string tempStr;
-                        WeatherGis weather = new WeatherGis(lat, lon);
+                        IWeather weather = new WeatherGis(lat, lon);
                         if (weather.isError == true) continue;
                         int temp = weather.WeatherTemp();
                         if (temp > 0) tempStr = "+" + temp; else tempStr = temp.ToString(); //adding sign "+" to temperature above zero
                         string condition = weather.WeatherCondition();
-                        ConsoleMessage.Write("(GIS)Начинаю передачу следующих данных в VizEngine:");
-                        ConsoleMessage.Write($"{cityCount,5} {lat,5} {lon,20} {tempStr,20} {city,5} {condition,20} {"currDate " + weather.LocalCurrDate(),10} {"frcDate " + weather.LocalForecastDate(),10}");
+                        LogMessage.Write("(GIS)Начинаю передачу следующих данных в VizEngine:");
+                        LogMessage.Write($"{cityCount,5} {lat,5} {lon,20} {tempStr,20} {city,5} {condition,20} " +
+                            $"{"currDate " + weather.LocalCurrDate(),10} {"frcDate " + weather.LocalForecastDate(),10}");
                         val = city + "*" + tempStr + "*" + condition;
                         sendToVizEngine.SendViaTCP(host, port, "key" + cityCount, val);
                         cityCount++;
                     }
-                    ConsoleMessage.Write(cityCount.ToString());
+                    LogMessage.Write(cityCount.ToString());
 
                     if (cityCount != 0)
                     {
                         sendToVizEngine.SendViaTCP(host, port, "city_number", cityCount.ToString()); //
                         DateTime now = DateTime.Now;
-                        ConsoleMessage.Write((now.Hour * 60 + now.Minute).ToString());
+                        LogMessage.Write((now.Hour * 60 + now.Minute).ToString());
                         sendToVizEngine.SendViaTCP(host, port, "data_freshness", (now.Hour * 60 + now.Minute).ToString());                       
                     }
 
                 }
                 catch (Exception e)
                 {
-                    ConsoleMessage.Write("Произошла ошибка. Перезапустите службу.", e);
+                    LogMessage.Write("Произошла ошибка. Перезапустите службу.", e);
                 }
             }
             
@@ -112,7 +113,7 @@ namespace Zontik
 
             catch (Exception e)
             {
-                ConsoleMessage.Write("Произошла ошибка в процессе мониторинга VizEngine.", e);
+                LogMessage.Write("Произошла ошибка в процессе мониторинга VizEngine.", e);
             }
                                      
         }
@@ -141,12 +142,12 @@ namespace Zontik
                         }
                     }
                 }                              
-                ConsoleMessage.Write("Очистка логов прошла успешно");
+                LogMessage.Write("Очистка логов прошла успешно");
 
             }
             catch (Exception e)
             {
-                ConsoleMessage.Write("Ошибка очистки логов", e);
+                LogMessage.Write("Ошибка очистки логов", e);
             }
 }
     }

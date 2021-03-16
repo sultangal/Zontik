@@ -61,20 +61,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleMessage.cs" />
+    <Compile Include="LogMessage.cs" />
     <Compile Include="CronNET\CronDaemon.cs" />
     <Compile Include="CronNET\CronJob.cs" />
     <Compile Include="CronNET\CronSchedule.cs" />
-    <Compile Include="GisMeteoWeatherAPI.cs" />
+    <Compile Include="Weather\GisMeteoWeatherAPI.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SendToVizEngine.cs" />
-    <Compile Include="Weather.cs" />
-    <Compile Include="WeatherGis.cs" />
-    <Compile Include="WeatherYan.cs" />
+    <Compile Include="Weather\IWeather.cs" />
+    <Compile Include="Weather\WeatherGis.cs" />
+    <Compile Include="Weather\WeatherYan.cs" />
     <Compile Include="XmlReadItem.cs" />
-    <Compile Include="YandexWeatherAPI.cs" />
+    <Compile Include="Weather\YandexWeatherAPI.cs" />
     <Compile Include="ZontikMainService.cs" />
   </ItemGroup>
   <ItemGroup>

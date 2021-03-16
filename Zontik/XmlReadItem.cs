@@ -30,11 +30,8 @@ namespace Zontik
 
                                 Item i = new Item();
                                 i.City = reader.GetAttribute("city");
-                                //ConsoleMessage.Write("BEFORE: "+ reader.GetAttribute("lat"));
                                 string latStr = reader.GetAttribute("lat").Replace(",", ".");
-                                //ConsoleMessage.Write("latStr: " + latStr);
                                 i.Lat = Math.Round(Convert.ToDecimal(latStr, numberFormat),14);
-                                //ConsoleMessage.Write("AFTER: " + i.Lat);
                                 string lonStr = reader.GetAttribute("lon").Replace(",", ".");
                                 i.Lon = Math.Round(Convert.ToDecimal(lonStr, numberFormat),14);
                                 itemList.Add(i);
@@ -47,7 +44,7 @@ namespace Zontik
                 }
                 catch (Exception e)
                 {
-                    ConsoleMessage.Write("Ошибка при чтении xml файла. Попробую снова через минуту...", e);
+                    LogMessage.Write("Ошибка при чтении xml файла. Попробую снова через минуту...", e);
                     Thread.Sleep(60000);
                     continue;
                 }

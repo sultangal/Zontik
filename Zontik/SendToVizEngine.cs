@@ -19,16 +19,16 @@ namespace Zontik
             {
                 try
                 {
-                    ConsoleMessage.Write("Подключаюсь к VizEngine...");
+                    LogMessage.Write("Подключаюсь к VizEngine...");
                     _tcpClient.Connect(host, port);
-                    ConsoleMessage.Write("Подключение успешно установлено");
+                    LogMessage.Write("Подключение успешно установлено");
                     _tcpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
                     _tcpClient.Client.Send(Encoding.UTF8.GetBytes(data + "\0"));
-                    ConsoleMessage.Write("Данные успешно переданы в VizEngine \n");
+                    LogMessage.Write("Данные успешно переданы в VizEngine \n");
                 }
                 catch (Exception e)
                 {
-                    ConsoleMessage.Write("Ошибка подключения к VizEngine. Попробую снова через 15 секунд...", e);
+                    LogMessage.Write("Ошибка подключения к VizEngine. Попробую снова через 15 секунд...", e);
                     Thread.Sleep(15000);
                     continue;
                 }

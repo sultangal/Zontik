@@ -6,7 +6,8 @@ using Newtonsoft.Json;
 
 namespace Zontik
 {
-    class WeatherYan : Weather
+    // TODO: Make durable realisation of IWeather interface
+    class WeatherYan
     {
         private YandexWeatherAPI yandexWeatherAPI;
         public WeatherYan(string lat, string lon)
@@ -29,19 +30,19 @@ namespace Zontik
                     request.Method = "GET";
 
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                    ConsoleMessage.Write("Получен ответ от сервера погоды");
+                    LogMessage.Write("Получен ответ от сервера погоды");
                     string strResponse;
                     using (StreamReader streamRead = new StreamReader(response.GetResponseStream()))
                     {
                         strResponse = streamRead.ReadToEnd();
                     }
-                    ConsoleMessage.Write("Полученный поток успешно прочитан");
+                    LogMessage.Write("Полученный поток успешно прочитан");
 
                     yandexWeatherAPI = JsonConvert.DeserializeObject<YandexWeatherAPI>(strResponse);
                 }
                 catch (Exception e)
                 {
-                    ConsoleMessage.Write("Ошибка запроса на сервер погоды. Попробую снова через минуту...", e);
+                    LogMessage.Write("Ошибка запроса на сервер погоды. Попробую снова через минуту...", e);
                     Thread.Sleep(60000);
                     continue;
                 }
@@ -50,12 +51,12 @@ namespace Zontik
 
         }
 
-        public override int WeatherTemp()
+        public int WeatherTemp()
         {
             return yandexWeatherAPI.fact.temp;
         }
 
-        public override string WeatherCondition()
+        public string WeatherCondition()
         {
             return ConvertYandexeIconID(yandexWeatherAPI.fact.condition.ToString());
         }
